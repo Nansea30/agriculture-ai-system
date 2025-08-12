@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 Agriculture AI System - Voice Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .voice-btn {
+            background-color: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .voice-btn:hover {
+            background-color: #FF5252;
+            transform: scale(1.05);
+        }
+        .voice-btn.listening {
+            background-color: #4CAF50;
+            animation: pulse 1.5s infinite;
+        }
+        .voice-btn.speaking {
+            background-color: #2196F3;
+            animation: pulse 1.5s infinite;
+        }
+        .voice-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .voice-status {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .voice-status.listening {
+            background-color: #E8F5E8;
+            color: #4CAF50;
+        }
+        .voice-status.processing {
+            background-color: #E3F2FD;
+            color: #2196F3;
+        }
+        .voice-status.error {
+            background-color: #FFEBEE;
+            color: #F44336;
+        }
+        .language-selector {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            margin-left: 10px;
+        }
+        .language-selector select {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            background-color: white;
+            font-size: 12px;
+        }
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .query-form {
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .demo-section {
+            background-color: #e8f5e8;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid #4CAF50;
+        }
+        .demo-response {
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌾 Agriculture AI System</h1>
+        <p>Voice-Enabled AI Assistant for Indian Farmers</p>
+        <p><strong>🎤 Speak • 👂 Listen • 🗣️ Respond</strong></p>
+    </div>
+    
+    <div class="container">
+        <div class="demo-section">
+            <h3>🎙️ Voice Command Demo</h3>
+            <p>This demo shows the voice functionality that has been integrated into your Agriculture AI System.</p>
+            <p><strong>Features:</strong></p>
+            <ul>
+                <li>🎤 <strong>Voice Input:</strong> Click "Start Voice" and speak your agriculture question in Hindi or English</li>
+                <li>🔊 <strong>Voice Output:</strong> AI responses can be spoken aloud in the same language</li>
+                <li>🌐 <strong>Multi-language:</strong> Supports Hindi, English, Marathi, Bengali, Telugu, Tamil, Gujarati, Kannada</li>
+                <li>📱 <strong>Browser Compatible:</strong> Works on Chrome, Edge, and Safari</li>
+            </ul>
+        </div>
+        
+        <form class="query-form" onsubmit="demoSubmitQuery(event)">
+            <div class="input-group">
+                <label for="query">Your Agriculture Query:</label>
+                <textarea id="query" name="query" placeholder="Ask about weather, crops, prices, irrigation, pests, or government schemes... (English/Hindi supported)" required></textarea>
+                <div class="voice-controls">
+                    <button type="button" id="voiceBtn" class="voice-btn" onclick="toggleVoiceRecognition()">
+                        🎤 <span id="voiceBtnText">Start Voice</span>
+                    </button>
+                    <button type="button" id="speakBtn" class="voice-btn" onclick="speakResponse()" style="display: none;">
+                        🔊 <span>Speak Answer</span>
+                    </button>
+                    <div id="voiceStatus" class="voice-status" style="display: none;"></div>
+                    <div class="language-selector">
+                        <label for="voiceLang">Voice:</label>
+                        <select id="voiceLang" onchange="updateVoiceLanguage()">
+                            <option value="en-US">English</option>
+                            <option value="hi-IN">हिन्दी</option>
+                            <option value="mr-IN">मराठी</option>
+                            <option value="bn-IN">বাংলা</option>
+                            <option value="te-IN">తెలుగు</option>
+                            <option value="ta-IN">தமிழ்</option>
+                            <option value="gu-IN">ગુજરાતી</option>
+                            <option value="kn-IN">ಕನ್ನಡ</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="location">Location (Optional):</label>
+                <input type="text" id="location" name="location" placeholder="e.g., Delhi, Mumbai, Punjab, Maharashtra...">
+            </div>
+            
+            <button type="submit" id="submitBtn">🚀 Get AI Advice</button>
+        </form>
+        
+        <div id="response" class="demo-response">
+            <div id="responseContent"></div>
+        </div>
+        
+        <div class="feature-list">
+            <div class="feature-card">
+                <h4>🎯 Voice Recognition</h4>
+                <p><strong>How to use:</strong></p>
+                <ol>
+                    <li>Select your language from the dropdown</li>
+                    <li>Click "Start Voice" button</li>
+                    <li>When you see "🎤 Listening...", speak clearly</li>
+                    <li>Your speech will appear in the text area</li>
+                    <li>Submit the query or edit as needed</li>
+                </ol>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🔊 Voice Responses</h4>
+                <p><strong>How to use:</strong></p>
+                <ol>
+                    <li>After getting a response, click "Speak Answer"</li>
+                    <li>The AI will read the response aloud</li>
+                    <li>Automatic language matching based on your query</li>
+                    <li>Click again to stop speaking</li>
+                    <li>Adjust speed and voice in browser settings</li>
+                </ol>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🌐 Multilingual Support</h4>
+                <p><strong>Supported languages:</strong></p>
+                <ul>
+                    <li>🇮🇳 Hindi (हिन्दी)</li>
+                    <li>🇮🇳 English</li>
+                    <li>🇮🇳 Marathi (मराठी)</li>
+                    <li>🇮🇳 Bengali (বাংলা)</li>
+                    <li>🇮🇳 Telugu (తెలుగు)</li>
+                    <li>🇮🇳 Tamil (தமிழ்)</li>
+                    <li>🇮🇳 Gujarati (ગુજરાતી)</li>
+                    <li>🇮🇳 Kannada (ಕನ್ನಡ)</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4>📝 Example Voice Queries</h4>
+                <p><strong>Try saying:</strong></p>
+                <ul>
+                    <li>"What is the weather forecast for Delhi?"</li>
+                    <li>"मेरे टमाटर के पौधे में कीट लगे हैं" (Hindi)</li>
+                    <li>"Cotton market price today"</li>
+                    <li>"धान की फसल कब लगाएं?" (Hindi)</li>
+                    <li>"PM Kisan scheme details"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Voice Recognition Variables
+        let recognition;
+        let isListening = false;
+        let speechSynthesis = window.speechSynthesis;
+        let currentUtterance = null;
+        let lastResponse = '';
+        let currentVoiceLang = 'en-US';
+
+        // Initialize Speech Recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+            } else if ('SpeechRecognition' in window) {
+                recognition = new SpeechRecognition();
+            } else {
+                console.log('Speech recognition not supported');
+                document.getElementById('voiceBtn').style.display = 'none';
+                return false;
+            }
+            
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = currentVoiceLang;
+            
+            recognition.onstart = function() {
+                isListening = true;
+                updateVoiceButton('listening');
+                showVoiceStatus('🎤 Listening...', 'listening');
+            };
+            
+            recognition.onresult = function(event) {
+                let finalTranscript = '';
+                let interimTranscript = '';
+                
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+                
+                if (finalTranscript) {
+                    document.getElementById('query').value = finalTranscript;
+                    showVoiceStatus('✓ Voice captured!', 'processing');
+                    setTimeout(() => hideVoiceStatus(), 2000);
+                } else if (interimTranscript) {
+                    document.getElementById('query').value = interimTranscript;
+                }
+            };
+            
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                let errorMsg = 'Voice recognition error';
+                switch(event.error) {
+                    case 'no-speech':
+                        errorMsg = 'No speech detected';
+                        break;
+                    case 'network':
+                        errorMsg = 'Network error';
+                        break;
+                    case 'not-allowed':
+                        errorMsg = 'Microphone access denied';
+                        break;
+                }
+                showVoiceStatus('❌ ' + errorMsg, 'error');
+                isListening = false;
+                updateVoiceButton('idle');
+                setTimeout(() => hideVoiceStatus(), 3000);
+            };
+            
+            recognition.onend = function() {
+                isListening = false;
+                updateVoiceButton('idle');
+            };
+            
+            return true;
+        }
+        
+        // Toggle Voice Recognition
+        function toggleVoiceRecognition() {
+            if (!recognition) {
+                if (!initSpeechRecognition()) {
+                    alert('Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari.');
+                    return;
+                }
+            }
+            
+            if (isListening) {
+                recognition.stop();
+                isListening = false;
+                updateVoiceButton('idle');
+                hideVoiceStatus();
+            } else {
+                recognition.lang = currentVoiceLang;
+                recognition.start();
+            }
+        }
+        
+        // Update Voice Button State
+        function updateVoiceButton(state) {
+            const btn = document.getElementById('voiceBtn');
+            const btnText = document.getElementById('voiceBtnText');
+            
+            btn.className = 'voice-btn';
+            
+            switch(state) {
+                case 'listening':
+                    btn.classList.add('listening');
+                    btnText.textContent = 'Stop Voice';
+                    break;
+                case 'processing':
+                    btn.disabled = true;
+                    btnText.textContent = 'Processing...';
+                    break;
+                case 'idle':
+                default:
+                    btn.disabled = false;
+                    btnText.textContent = 'Start Voice';
+                    break;
+            }
+        }
+        
+        // Show Voice Status
+        function showVoiceStatus(message, type) {
+            const status = document.getElementById('voiceStatus');
+            status.textContent = message;
+            status.className = 'voice-status ' + type;
+            status.style.display = 'block';
+        }
+        
+        // Hide Voice Status
+        function hideVoiceStatus() {
+            document.getElementById('voiceStatus').style.display = 'none';
+        }
+        
+        // Update Voice Language
+        function updateVoiceLanguage() {
+            currentVoiceLang = document.getElementById('voiceLang').value;
+            if (recognition) {
+                recognition.lang = currentVoiceLang;
+            }
+        }
+        
+        // Speech Synthesis Functions
+        function speakResponse() {
+            if (!lastResponse) {
+                alert('No response to speak. Please ask a question first.');
+                return;
+            }
+            
+            // Stop any current speech
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+                updateSpeakButton('idle');
+                return;
+            }
+            
+            // Create utterance
+            currentUtterance = new SpeechSynthesisUtterance(lastResponse);
+            
+            // Set voice language
+            const voices = speechSynthesis.getVoices();
+            const preferredVoice = voices.find(voice => voice.lang.startsWith(currentVoiceLang.substring(0, 2)));
+            if (preferredVoice) {
+                currentUtterance.voice = preferredVoice;
+            }
+            
+            // Configure speech parameters
+            currentUtterance.rate = 0.9;
+            currentUtterance.pitch = 1.0;
+            currentUtterance.volume = 1.0;
+            
+            // Event handlers
+            currentUtterance.onstart = function() {
+                updateSpeakButton('speaking');
+            };
+            
+            currentUtterance.onend = function() {
+                updateSpeakButton('idle');
+            };
+            
+            currentUtterance.onerror = function(event) {
+                console.error('Speech synthesis error:', event.error);
+                updateSpeakButton('idle');
+            };
+            
+            // Start speaking
+            speechSynthesis.speak(currentUtterance);
+        }
+        
+        // Update Speak Button State
+        function updateSpeakButton(state) {
+            const btn = document.getElementById('speakBtn');
+            const btnSpan = btn.querySelector('span');
+            
+            btn.className = 'voice-btn';
+            
+            switch(state) {
+                case 'speaking':
+                    btn.classList.add('speaking');
+                    btnSpan.textContent = 'Stop Speaking';
+                    break;
+                case 'idle':
+                default:
+                    btnSpan.textContent = 'Speak Answer';
+                    break;
+            }
+        }
+        
+        // Demo Submit Query (simulated)
+        function demoSubmitQuery(event) {
+            event.preventDefault();
+            
+            const query = document.getElementById('query').value;
+            const location = document.getElementById('location').value;
+            const responseDiv = document.getElementById('response');
+            const responseContent = document.getElementById('responseContent');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Show loading state
+            responseDiv.style.display = 'block';
+            responseContent.innerHTML = '<div style="text-align: center; color: #666;">🤖 Processing your query...</div>';
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Processing...';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                let demoResponse;
+                let language = 'en';
+                
+                // Detect if query contains Hindi characters
+                if (/[\u0900-\u097F]/.test(query)) {
+                    language = 'hi';
+                    demoResponse = "आपके प्रश्न के आधार पर, यहाँ कुछ सुझाव हैं। कृषि विशेषज्ञों से सलाह लेना बेहतर होगा। मौसम की जानकारी और फसल की देखभाल के लिए स्थानीय कृषि अधिकारी से संपर्क करें।";
+                } else {
+                    demoResponse = "Based on your query, here are some recommendations for your agricultural needs. For weather information, crop guidance, and pest management, consult with local agriculture officers. Regular monitoring and proper irrigation will help improve crop yield.";
+                }
+                
+                // Store response for voice synthesis
+                lastResponse = demoResponse;
+                
+                // Show speak button
+                document.getElementById('speakBtn').style.display = 'flex';
+                
+                // Update voice language based on response
+                if (language === 'hi') {
+                    document.getElementById('voiceLang').value = 'hi-IN';
+                    currentVoiceLang = 'hi-IN';
+                } else {
+                    document.getElementById('voiceLang').value = 'en-US';
+                    currentVoiceLang = 'en-US';
+                }
+                
+                responseContent.innerHTML = `
+                    <div style="white-space: pre-wrap; line-height: 1.6;">${demoResponse}</div>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 12px; color: #666;">
+                        📊 Demo Mode | 🌐 Language: ${language === 'hi' ? 'Hindi' : 'English'} | 
+                        🎙️ <button onclick="speakResponse()" style="background: none; border: none; color: #4CAF50; cursor: pointer; text-decoration: underline;">Click to hear response</button>
+                    </div>
+                `;
+                
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 Get AI Advice';
+            }, 2000);
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            // Load voices
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = function() {
+                    console.log('Voices loaded');
+                };
+            }
+            
+            // Check if speech recognition is supported
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                document.getElementById('voiceBtn').style.display = 'none';
+                alert('Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari for voice features.');
+            }
+        });
+    </script>
+</body>
+</html>
