@@ -9,6 +9,44 @@
 
 A comprehensive AI-powered decision support system designed specifically for Indian farmers. Features **voice commands in 8 Indian languages**, real-time speech recognition, and natural voice responses, making agricultural advice accessible to farmers who prefer speaking over typing.
 
+## 🌐 **Live Demo - Try Voice Commands Now!**
+
+- **🎤 Voice Demo**: [https://nansea30.github.io/agriculture-ai-system/voice_demo.html](https://nansea30.github.io/agriculture-ai-system/voice_demo.html)
+- **🌾 Farming Voice Commands**: [https://nansea30.github.io/agriculture-ai-system/farming_voice_commands.html](https://nansea30.github.io/agriculture-ai-system/farming_voice_commands.html)
+- **📱 Mobile-Friendly**: Works on smartphones with voice recognition!
+
+## 🚀 **Quick Start - Try Voice Features**
+
+### **🌐 No Installation Required - Use Online:**
+1. **Open**: [Voice Demo](https://nansea30.github.io/agriculture-ai-system/voice_demo.html) or [Farming Commands](https://nansea30.github.io/agriculture-ai-system/farming_voice_commands.html)
+2. **Allow microphone access** when browser asks
+3. **Click "🎤 Start Voice"** and say: *"What is the weather forecast for Delhi?"*
+4. **Click "🔊 Speak Answer"** to hear the AI response
+5. **Try Hindi**: *"आज बारिश होगी क्या?"* (Will it rain today?)
+
+### **🖥️ Local Development:**
+```bash
+# Clone and run locally
+git clone https://github.com/Nansea30/agriculture-ai-system.git
+cd agriculture-ai-system
+python web_api.py
+# Open http://localhost:8080
+```
+
+### **🎤 Voice Commands to Try:**
+
+**English Examples:**
+- *"What is the weather forecast for Delhi?"*
+- *"Cotton market price today"*
+- *"How to control pests in tomato plants?"*
+- *"PM Kisan scheme eligibility"*
+
+**Hindi Examples (हिन्दी):**
+- *"आज बारिश होगी क्या?"* (Will it rain today?)
+- *"मेरे टमाटर के पौधे में कीट लगे हैं"* (My tomato plants have pests)
+- *"धान की फसल कब लगाएं?"* (When to plant rice crop?)
+- *"गेहूं का आज का भाव क्या है?"* (What's today's wheat price?)
+
 ## 🎯 Overview
 
 This system acts as a digital agriculture extension service, capable of understanding multilingual farmer queries (Hindi, English, and other Indian languages) and providing reliable, data-driven advice. It's designed to work with Indian agriculture datasets, government APIs, and local conditions.
