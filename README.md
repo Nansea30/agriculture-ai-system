@@ -11,27 +11,16 @@ A comprehensive AI-powered decision support system designed specifically for Ind
 
 ## 🌐 **Live Demo - Try Voice Commands Now!**
 
-- **🎤 Voice Demo**: [https://nansea30.github.io/agriculture-ai-system/voice_demo.html](https://nansea30.github.io/agriculture-ai-system/voice_demo.html)
-- **🌾 Farming Voice Commands**: [https://nansea30.github.io/agriculture-ai-system/farming_voice_commands.html](https://nansea30.github.io/agriculture-ai-system/farming_voice_commands.html)
-- **📱 Mobile-Friendly**: Works on smartphones with voice recognition!
+-https://kissan.ai/chat
 
 ## 🚀 **Quick Start - Try Voice Features**
 
 ### **🌐 No Installation Required - Use Online:**
-1. **Open**: [Voice Demo](https://nansea30.github.io/agriculture-ai-system/voice_demo.html) or [Farming Commands](https://nansea30.github.io/agriculture-ai-system/farming_voice_commands.html)
+1. **Open**: [Voice Demo](https://nansea30.github.io/agriculture-ai-system/voice_demo.html) or [Farming Commands](https://nansea30.github.io/agriculture-ai-system/farming_voice_commands.html) or https://kissan.ai/chat
 2. **Allow microphone access** when browser asks
 3. **Click "🎤 Start Voice"** and say: *"What is the weather forecast for Delhi?"*
 4. **Click "🔊 Speak Answer"** to hear the AI response
 5. **Try Hindi**: *"आज बारिश होगी क्या?"* (Will it rain today?)
-
-### **🖥️ Local Development:**
-```bash
-# Clone and run locally
-git clone https://github.com/Nansea30/agriculture-ai-system.git
-cd agriculture-ai-system
-python web_api.py
-# Open http://localhost:8080
-```
 
 ### **🎤 Voice Commands to Try:**
 
